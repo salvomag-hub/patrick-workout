@@ -1072,7 +1072,14 @@
         function importWorkout() {
             try {
                 const code = document.getElementById('importCode').value.trim();
-                const data = JSON.parse(atob(code));
+                // Try UTF-8 safe decode first, fallback to regular atob
+                let jsonStr;
+                try {
+                    jsonStr = base64ToUtf8(code);
+                } catch (e) {
+                    jsonStr = atob(code);
+                }
+                const data = JSON.parse(jsonStr);
                 if (data.name && data.exercises) {
                     const id = 'workout_' + Date.now();
                     workouts[id] = data;
@@ -1090,10 +1097,23 @@
             }
         }
         
+        // UTF-8 safe base64 encode/decode
+        function utf8ToBase64(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                return String.fromCharCode('0x' + p1);
+            }));
+        }
+        
+        function base64ToUtf8(str) {
+            return decodeURIComponent(atob(str).split('').map(c => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        }
+        
         function showExportModal() {
             try {
                 const workout = getCurrentWorkout();
-                const code = btoa(JSON.stringify(workout));
+                const code = utf8ToBase64(JSON.stringify(workout));
                 document.getElementById('exportCode').value = code;
                 document.getElementById('exportModal').classList.add('active');
             } catch (err) {
@@ -1325,7 +1345,14 @@
             const code = params.get('w');
             if (code) {
                 try {
-                    const data = JSON.parse(atob(code));
+                    // Try UTF-8 safe decode first, fallback to regular atob
+                    let jsonStr;
+                    try {
+                        jsonStr = base64ToUtf8(code);
+                    } catch (e) {
+                        jsonStr = atob(code);
+                    }
+                    const data = JSON.parse(jsonStr);
                     if (data.name && data.exercises) {
                         const id = 'workout_' + Date.now();
                         workouts[id] = data;
