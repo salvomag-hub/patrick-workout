@@ -1091,10 +1091,14 @@
         }
         
         function showExportModal() {
-            const workout = getCurrentWorkout();
-            const code = btoa(JSON.stringify(workout));
-            document.getElementById('exportCode').value = code;
-            document.getElementById('exportModal').classList.add('active');
+            try {
+                const workout = getCurrentWorkout();
+                const code = btoa(JSON.stringify(workout));
+                document.getElementById('exportCode').value = code;
+                document.getElementById('exportModal').classList.add('active');
+            } catch (err) {
+                alert('Errore export: ' + err.message);
+            }
         }
         
         function closeExportModal() {

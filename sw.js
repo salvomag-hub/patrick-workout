@@ -1,4 +1,4 @@
-const CACHE_NAME = 'patrick-workout-v3';
+const CACHE_NAME = 'patrick-workout-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -15,12 +15,20 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        if (response) {
-          return response;
+        // Update cache with fresh response
+        if (response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
         }
-        return fetch(event.request);
+        return response;
+      })
+      .catch(() => {
+        // Fallback to cache if offline
+        return caches.match(event.request);
       })
   );
 });
