@@ -557,9 +557,14 @@
         <div style="padding: 20px;">
             <div class="workout-select">
                 <div class="workout-tabs" id="workoutTabs"></div>
-                <button class="btn secondary" style="margin-top: 10px; width: 100%;" onclick="showNewWorkoutModal()">
-                    ➕ Nuovo Workout
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn secondary" style="flex: 1;" onclick="showNewWorkoutModal()">
+                        ➕ Nuovo
+                    </button>
+                    <button class="btn" style="flex: 1; background: #c0392b;" onclick="deleteCurrentWorkout()">
+                        🗑 Elimina
+                    </button>
+                </div>
             </div>
             
             <div class="exercise-list" id="exerciseList"></div>
@@ -1032,6 +1037,28 @@
             }
         }
         
+        function deleteCurrentWorkout() {
+            const workout = getCurrentWorkout();
+            if (Object.keys(workouts).length <= 1) {
+                // If only one workout, just clear exercises
+                if (confirm('Vuoi svuotare tutti gli esercizi?')) {
+                    workouts[currentWorkoutId].exercises = [];
+                    saveData();
+                    renderExercises();
+                    alert('Workout svuotato!');
+                }
+                return;
+            }
+            if (confirm(`Eliminare "${workout.name}"?`)) {
+                delete workouts[currentWorkoutId];
+                currentWorkoutId = Object.keys(workouts)[0];
+                saveData();
+                renderWorkoutTabs();
+                renderExercises();
+                alert('Workout eliminato!');
+            }
+        }
+        
         // Import/Export
         function showImportModal() {
             document.getElementById('importCode').value = '';
@@ -1299,15 +1326,26 @@
                         const id = 'workout_' + Date.now();
                         workouts[id] = data;
                         currentWorkoutId = id;
+                        // Save multiple times to ensure persistence
                         saveData();
+                        localStorage.setItem('patrickWorkouts', JSON.stringify(workouts));
+                        localStorage.setItem('currentWorkoutId', currentWorkoutId);
                         // Clean URL
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        alert(`Workout "${data.name}" importato! 🎉`);
+                        alert(`Workout "${data.name}" importato e salvato! 🎉\n\n${data.exercises.length} esercizi caricati.`);
                     }
                 } catch (err) {
-                    console.log('Invalid URL workout code');
+                    console.log('Invalid URL workout code:', err);
+                    alert('Codice workout non valido!');
                 }
             }
+        }
+        
+        // Debug function to check storage
+        function checkStorage() {
+            const saved = localStorage.getItem('patrickWorkouts');
+            console.log('Stored workouts:', saved);
+            alert('Workout salvati: ' + Object.keys(workouts).length + '\nWorkout corrente: ' + getCurrentWorkout().name);
         }
         
         // Init
