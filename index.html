@@ -789,11 +789,35 @@
             if (saved) {
                 workouts = JSON.parse(saved);
             } else {
-                // Default workout
+                // Default workout - Pilates Strength 9 Feb
                 workouts = {
                     'default': {
-                        name: 'Il Mio Workout',
-                        exercises: []
+                        name: 'Pilates Strength - 9 Feb',
+                        exercises: [
+                            {"name": "🔥 ROUND 1", "description": "First round - focus on form!", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Single Leg Bridge - LEFT", "description": "Supina, solleva una gamba. Spingi col tallone a terra e solleva il bacino. Core attivo!", "type": "reps", "duration": 30, "reps": 12, "rest": 10},
+                            {"name": "Single Leg Bridge - RIGHT", "description": "Cambia gamba. Mantieni il bacino stabile, non ruotare.", "type": "reps", "duration": 30, "reps": 12, "rest": 15},
+                            {"name": "Pilates Leg Curls - LEFT", "description": "Prona, piega la gamba portando il tallone verso il gluteo. Movimento lento e controllato.", "type": "reps", "duration": 30, "reps": 15, "rest": 10},
+                            {"name": "Pilates Leg Curls - RIGHT", "description": "Cambia gamba. Senti lavorare i femorali.", "type": "reps", "duration": 30, "reps": 15, "rest": 15},
+                            {"name": "Calf Raises (Relevés)", "description": "In piedi, solleva sui polpacci. Sali lentamente, scendi controllando.", "type": "reps", "duration": 30, "reps": 20, "rest": 15},
+                            {"name": "Wall Sit", "description": "Schiena al muro, cosce parallele al pavimento. Tieni duro! 💪", "type": "timer", "duration": 45, "rest": 15, "reps": 1},
+                            {"name": "Swimming", "description": "Prona, braccia e gambe estese. Alterna braccio dx/gamba sx. Core sempre attivo!", "type": "reps", "duration": 30, "reps": 10, "rest": 60},
+                            {"name": "🔥 ROUND 2", "description": "Second round - push through!", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Single Leg Bridge - LEFT", "description": "Round 2! Mantieni la qualità del movimento.", "type": "reps", "duration": 30, "reps": 12, "rest": 10},
+                            {"name": "Single Leg Bridge - RIGHT", "description": "Ultima serie bridges! Stringi i glutei.", "type": "reps", "duration": 30, "reps": 12, "rest": 15},
+                            {"name": "Pilates Leg Curls - LEFT", "description": "Round 2. Movimento controllato!", "type": "reps", "duration": 30, "reps": 15, "rest": 10},
+                            {"name": "Pilates Leg Curls - RIGHT", "description": "Ultima serie curls! Senti il bruciore 🔥", "type": "reps", "duration": 30, "reps": 15, "rest": 15},
+                            {"name": "Calf Raises (Relevés)", "description": "Round 2 - polpacci in fiamme! 🔥", "type": "reps", "duration": 30, "reps": 20, "rest": 15},
+                            {"name": "Wall Sit", "description": "Ultimo wall sit! Non mollare! 💪", "type": "timer", "duration": 45, "rest": 15, "reps": 1},
+                            {"name": "Swimming", "description": "Ultimo esercizio del workout! Dai tutto!", "type": "reps", "duration": 30, "reps": 10, "rest": 30},
+                            {"name": "🧘 STRETCHING", "description": "Great job! Now let's stretch those muscles.", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Butterfly Stretch", "description": "Seduta, piante dei piedi unite, ginocchia aperte. Spingi delicatamente le ginocchia verso il basso.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Side Lunge - LEFT focus", "description": "Affondo laterale a sinistra. Attenzione agli adduttori - vai piano!", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Supine IT Band Stretch - RIGHT", "description": "Supina, gamba destra sul petto, poi portala verso sinistra. Focus sulla bandelletta.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Figure 4 Stretch - LEFT", "description": "Supina, caviglia sx sul ginocchio dx. Tira verso il petto.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Figure 4 Stretch - RIGHT", "description": "Cambia lato. Respira profondamente.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Child's Pose", "description": "Rilassati completamente. Respira. Ce l'hai fatta! 🎉", "type": "timer", "duration": 60, "rest": 0, "reps": 1}
+                        ]
                     }
                 };
             }
