@@ -1,7 +1,7 @@
 {
-  "name": "Patrick Workout",
+  "name": "Viktor Workout",
   "short_name": "Workout",
-  "description": "App per allenamenti personalizzati da Patrick",
+  "description": "App per allenamenti personalizzati da Viktor",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
