@@ -541,6 +541,77 @@
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
+        
+        /* Exercise Animations */
+        .exercise-animation {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes squat {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(15px) scaleY(0.85); }
+        }
+        
+        @keyframes lunge {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        @keyframes bridge {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+        
+        @keyframes curl {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+        
+        @keyframes calf {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes wallsit {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        
+        @keyframes swim {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        @keyframes stretch {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes rest {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .anim-squat { animation: squat 1.5s ease-in-out infinite; }
+        .anim-lunge { animation: lunge 1.2s ease-in-out infinite; }
+        .anim-bridge { animation: bridge 1.5s ease-in-out infinite; }
+        .anim-curl { animation: curl 1s ease-in-out infinite; }
+        .anim-calf { animation: calf 1s ease-in-out infinite; }
+        .anim-wallsit { animation: wallsit 2s ease-in-out infinite; }
+        .anim-swim { animation: swim 1s ease-in-out infinite; }
+        .anim-stretch { animation: stretch 2s ease-in-out infinite; }
+        .anim-rest { animation: rest 1.5s ease-in-out infinite; }
+        .anim-bounce { animation: bounce 0.8s ease-in-out infinite; }
     </style>
 </head>
 <body>
@@ -598,6 +669,7 @@
         </div>
         
         <div class="workout-main" id="workoutMain">
+            <div class="exercise-animation" id="exerciseAnimation">🏋️</div>
             <div class="exercise-name" id="currentExerciseName">Squat</div>
             <div class="exercise-description" id="currentExerciseDesc">
                 Piedi larghezza spalle, scendi fino a cosce parallele al suolo.
@@ -1132,6 +1204,66 @@
             alert('Codice copiato! 📋');
         }
         
+        // Exercise Animation Mapping
+        function getExerciseAnimation(name) {
+            const n = name.toLowerCase();
+            
+            // Rest/Recovery
+            if (n.includes('recupero') || n.includes('rest') || n.includes('💤')) {
+                return { emoji: '😌', anim: 'anim-rest' };
+            }
+            
+            // Stretching
+            if (n.includes('stretch') || n.includes('child') || n.includes('butterfly') || n.includes('yoga')) {
+                return { emoji: '🧘', anim: 'anim-stretch' };
+            }
+            
+            // Squat variations
+            if (n.includes('squat') || n.includes('wall sit')) {
+                if (n.includes('jump')) return { emoji: '🦘', anim: 'anim-bounce' };
+                if (n.includes('wall')) return { emoji: '🧱', anim: 'anim-wallsit' };
+                return { emoji: '🏋️', anim: 'anim-squat' };
+            }
+            
+            // Lunges
+            if (n.includes('lunge') || n.includes('affond')) {
+                return { emoji: '🦵', anim: 'anim-lunge' };
+            }
+            
+            // Bridge
+            if (n.includes('bridge') || n.includes('ponte')) {
+                return { emoji: '🌉', anim: 'anim-bridge' };
+            }
+            
+            // Curls (leg)
+            if (n.includes('curl')) {
+                return { emoji: '🦿', anim: 'anim-curl' };
+            }
+            
+            // Calf raises
+            if (n.includes('calf') || n.includes('relev')) {
+                return { emoji: '🦶', anim: 'anim-calf' };
+            }
+            
+            // Swimming
+            if (n.includes('swim')) {
+                return { emoji: '🏊', anim: 'anim-swim' };
+            }
+            
+            // Crunch / Abs
+            if (n.includes('crunch') || n.includes('ab') || n.includes('bicicl')) {
+                return { emoji: '💪', anim: 'anim-curl' };
+            }
+            
+            // Round markers
+            if (n.includes('round') || n.includes('🔥')) {
+                return { emoji: '🔥', anim: 'anim-bounce' };
+            }
+            
+            // Default
+            return { emoji: '💪', anim: 'anim-bounce' };
+        }
+        
         // Workout Execution
         function startWorkout() {
             const workout = getCurrentWorkout();
@@ -1171,6 +1303,8 @@
             document.getElementById('progressFill').style.width = 
                 `${((currentExerciseIndex + 1) / workout.exercises.length) * 100}%`;
             
+            const animDiv = document.getElementById('exerciseAnimation');
+            
             if (isResting) {
                 document.getElementById('currentExerciseName').textContent = '💤 Recupero';
                 document.getElementById('currentExerciseDesc').innerHTML = 
@@ -1179,8 +1313,13 @@
                             ? workout.exercises[currentExerciseIndex + 1].name 
                             : '🎉 Fine!'
                     }</div></div>`;
+                animDiv.textContent = '😌';
+                animDiv.className = 'exercise-animation anim-rest';
                 startTimer(ex.rest);
             } else {
+                const anim = getExerciseAnimation(ex.name);
+                animDiv.textContent = anim.emoji;
+                animDiv.className = 'exercise-animation ' + anim.anim;
                 document.getElementById('currentExerciseName').textContent = ex.name;
                 document.getElementById('currentExerciseDesc').textContent = ex.description || '';
                 
@@ -1208,8 +1347,15 @@
                     remainingTime--;
                     updateTimerDisplay();
                     
-                    if (remainingTime <= 3 && remainingTime > 0) {
-                        playBeep(400, 100);
+                    // Countdown beeps for last 5 seconds
+                    if (remainingTime <= 5 && remainingTime > 0) {
+                        if (remainingTime <= 3) {
+                            // Last 3 seconds: higher pitch, louder
+                            playBeep(800, 150);
+                        } else {
+                            // 5 and 4 seconds: lower pitch
+                            playBeep(500, 100);
+                        }
                     }
                     
                     if (remainingTime <= 0) {
