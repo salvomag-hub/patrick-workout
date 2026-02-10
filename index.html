@@ -825,34 +825,83 @@
             if (saved) {
                 workouts = JSON.parse(saved);
             } else {
-                // Default workout - Pilates Strength 9 Feb
+                // Default workout - Pilates Strength TOUGH 11 Feb
                 workouts = {
                     'default': {
-                        name: 'Pilates Strength - 9 Feb',
+                        name: '💪 Pilates TOUGH - 11 Feb',
                         exercises: [
-                            {"name": "🔥 ROUND 1", "description": "First round - focus on form!", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
-                            {"name": "Single Leg Bridge - LEFT", "description": "Supina, solleva una gamba. Spingi col tallone a terra e solleva il bacino. Core attivo!", "type": "reps", "duration": 30, "reps": 12, "rest": 10},
-                            {"name": "Single Leg Bridge - RIGHT", "description": "Cambia gamba. Mantieni il bacino stabile, non ruotare.", "type": "reps", "duration": 30, "reps": 12, "rest": 15},
-                            {"name": "Pilates Leg Curls - LEFT", "description": "Prona, piega la gamba portando il tallone verso il gluteo. Movimento lento e controllato.", "type": "reps", "duration": 30, "reps": 15, "rest": 10},
-                            {"name": "Pilates Leg Curls - RIGHT", "description": "Cambia gamba. Senti lavorare i femorali.", "type": "reps", "duration": 30, "reps": 15, "rest": 15},
-                            {"name": "Calf Raises (Relevés)", "description": "In piedi, solleva sui polpacci. Sali lentamente, scendi controllando.", "type": "reps", "duration": 30, "reps": 20, "rest": 15},
-                            {"name": "Wall Sit", "description": "Schiena al muro, cosce parallele al pavimento. Tieni duro! 💪", "type": "timer", "duration": 45, "rest": 15, "reps": 1},
-                            {"name": "Swimming", "description": "Prona, braccia e gambe estese. Alterna braccio dx/gamba sx. Core sempre attivo!", "type": "reps", "duration": 30, "reps": 10, "rest": 60},
-                            {"name": "🔥 ROUND 2", "description": "Second round - push through!", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
-                            {"name": "Single Leg Bridge - LEFT", "description": "Round 2! Mantieni la qualità del movimento.", "type": "reps", "duration": 30, "reps": 12, "rest": 10},
-                            {"name": "Single Leg Bridge - RIGHT", "description": "Ultima serie bridges! Stringi i glutei.", "type": "reps", "duration": 30, "reps": 12, "rest": 15},
-                            {"name": "Pilates Leg Curls - LEFT", "description": "Round 2. Movimento controllato!", "type": "reps", "duration": 30, "reps": 15, "rest": 10},
-                            {"name": "Pilates Leg Curls - RIGHT", "description": "Ultima serie curls! Senti il bruciore 🔥", "type": "reps", "duration": 30, "reps": 15, "rest": 15},
-                            {"name": "Calf Raises (Relevés)", "description": "Round 2 - polpacci in fiamme! 🔥", "type": "reps", "duration": 30, "reps": 20, "rest": 15},
-                            {"name": "Wall Sit", "description": "Ultimo wall sit! Non mollare! 💪", "type": "timer", "duration": 45, "rest": 15, "reps": 1},
-                            {"name": "Swimming", "description": "Ultimo esercizio del workout! Dai tutto!", "type": "reps", "duration": 30, "reps": 10, "rest": 30},
-                            {"name": "🧘 STRETCHING", "description": "Great job! Now let's stretch those muscles.", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
-                            {"name": "Butterfly Stretch", "description": "Seduta, piante dei piedi unite, ginocchia aperte. Spingi delicatamente le ginocchia verso il basso.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
-                            {"name": "Side Lunge - LEFT focus", "description": "Affondo laterale a sinistra. Attenzione agli adduttori - vai piano!", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
-                            {"name": "Supine IT Band Stretch - RIGHT", "description": "Supina, gamba destra sul petto, poi portala verso sinistra. Focus sulla bandelletta.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
-                            {"name": "Figure 4 Stretch - LEFT", "description": "Supina, caviglia sx sul ginocchio dx. Tira verso il petto.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
-                            {"name": "Figure 4 Stretch - RIGHT", "description": "Cambia lato. Respira profondamente.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
-                            {"name": "Child's Pose", "description": "Rilassati completamente. Respira. Ce l'hai fatta! 🎉", "type": "timer", "duration": 60, "rest": 0, "reps": 1}
+                            // WARM-UP
+                            {"name": "🔥 WARM-UP", "description": "Get your body ready! 5 minutes to activate.", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Marching in Place", "description": "March with high knees, pump your arms!", "type": "timer", "duration": 60, "rest": 5, "reps": 1},
+                            {"name": "Leg Swings - Front/Back LEFT", "description": "Hold something for balance. Swing leg forward and back.", "type": "reps", "duration": 30, "reps": 10, "rest": 5},
+                            {"name": "Leg Swings - Front/Back RIGHT", "description": "Switch legs. Control the movement.", "type": "reps", "duration": 30, "reps": 10, "rest": 5},
+                            {"name": "Leg Swings - Side to Side LEFT", "description": "Swing leg across body and out to the side.", "type": "reps", "duration": 30, "reps": 10, "rest": 5},
+                            {"name": "Leg Swings - Side to Side RIGHT", "description": "Switch legs. Keep core engaged.", "type": "reps", "duration": 30, "reps": 10, "rest": 5},
+                            {"name": "Hip Circles LEFT", "description": "Hands on hips, circle your hips. Big circles!", "type": "reps", "duration": 30, "reps": 10, "rest": 5},
+                            {"name": "Hip Circles RIGHT", "description": "Reverse direction.", "type": "reps", "duration": 30, "reps": 10, "rest": 10},
+                            
+                            // ROUND 1
+                            {"name": "🔥 ROUND 1 of 3", "description": "First round - FOCUS ON FORM! 💪", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Single Leg Bridge - LEFT", "description": "12 reps + 10 PULSES at top. Squeeze glutes HARD!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge LEFT - PULSES", "description": "10 small pulses at the top. Don't drop!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Single Leg Bridge - RIGHT", "description": "12 reps + 10 PULSES. Keep hips level!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge RIGHT - PULSES", "description": "10 pulses. Feel the burn! 🔥", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Pilates Leg Curls - LEFT", "description": "15 reps + 10 PULSES. Control the movement!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls LEFT - PULSES", "description": "10 small pulses. Hamstrings on fire!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Pilates Leg Curls - RIGHT", "description": "15 reps + 10 PULSES. Slow and controlled!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls RIGHT - PULSES", "description": "10 pulses to finish!", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Calf Raises (Relevés)", "description": "25 reps slow and controlled. Full range!", "type": "reps", "duration": 45, "reps": 25, "rest": 5},
+                            {"name": "Calf Raises - HOLD", "description": "HOLD at the top for 10 seconds! 🔥", "type": "timer", "duration": 10, "rest": 15, "reps": 1},
+                            {"name": "Wall Sit", "description": "60 SECONDS - NO MERCY! 😈 Thighs parallel to floor!", "type": "timer", "duration": 60, "rest": 15, "reps": 1},
+                            {"name": "Swimming", "description": "15 reps each side. Opposite arm/leg lifts.", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Swimming - Flutter Hold", "description": "10 second flutter kick hold! Core tight!", "type": "timer", "duration": 10, "rest": 45, "reps": 1},
+                            
+                            // ROUND 2
+                            {"name": "🔥 ROUND 2 of 3", "description": "Second round - PUSH THROUGH! 💪", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Single Leg Bridge - LEFT", "description": "12 reps + 10 PULSES. You know the drill!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge LEFT - PULSES", "description": "10 pulses. Don't give up!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Single Leg Bridge - RIGHT", "description": "12 reps + 10 PULSES. Squeeze!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge RIGHT - PULSES", "description": "10 pulses. Halfway there!", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Pilates Leg Curls - LEFT", "description": "15 reps + 10 PULSES. Stay strong!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls LEFT - PULSES", "description": "10 pulses. Feel it!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Pilates Leg Curls - RIGHT", "description": "15 reps + 10 PULSES. Almost done with curls!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls RIGHT - PULSES", "description": "10 final pulses!", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Calf Raises (Relevés)", "description": "25 reps. Calves are burning! 🔥", "type": "reps", "duration": 45, "reps": 25, "rest": 5},
+                            {"name": "Calf Raises - HOLD", "description": "HOLD 10 seconds at the top!", "type": "timer", "duration": 10, "rest": 15, "reps": 1},
+                            {"name": "Wall Sit", "description": "60 SECONDS AGAIN! 😈 No excuses!", "type": "timer", "duration": 60, "rest": 15, "reps": 1},
+                            {"name": "Swimming", "description": "15 reps each side. Keep that core engaged!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Swimming - Flutter Hold", "description": "10 second flutter hold!", "type": "timer", "duration": 10, "rest": 45, "reps": 1},
+                            
+                            // ROUND 3
+                            {"name": "🔥 ROUND 3 of 3 - FINAL!", "description": "LAST ROUND! Give it EVERYTHING! 💪🔥", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Single Leg Bridge - LEFT", "description": "FINAL 12 reps + 10 PULSES!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge LEFT - PULSES", "description": "Last 10 pulses this side!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Single Leg Bridge - RIGHT", "description": "FINAL 12 reps + 10 PULSES!", "type": "reps", "duration": 45, "reps": 12, "rest": 5},
+                            {"name": "Single Leg Bridge RIGHT - PULSES", "description": "Done with bridges after this! 🎉", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Pilates Leg Curls - LEFT", "description": "FINAL 15 reps + 10 PULSES!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls LEFT - PULSES", "description": "10 pulses - you're a warrior!", "type": "reps", "duration": 20, "reps": 10, "rest": 10},
+                            {"name": "Pilates Leg Curls - RIGHT", "description": "LAST SET EVER! 15 reps + 10 PULSES!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Pilates Leg Curls RIGHT - PULSES", "description": "FINAL 10 pulses! You did it!", "type": "reps", "duration": 20, "reps": 10, "rest": 15},
+                            {"name": "Calf Raises (Relevés)", "description": "FINAL 25 reps! Push through!", "type": "reps", "duration": 45, "reps": 25, "rest": 5},
+                            {"name": "Calf Raises - HOLD", "description": "LAST HOLD - 10 seconds!", "type": "timer", "duration": 10, "rest": 15, "reps": 1},
+                            {"name": "Wall Sit", "description": "FINAL 60 SECONDS! 😈 YOU'VE GOT THIS!", "type": "timer", "duration": 60, "rest": 15, "reps": 1},
+                            {"name": "Swimming", "description": "FINAL 15 reps each side!", "type": "reps", "duration": 45, "reps": 15, "rest": 5},
+                            {"name": "Swimming - Flutter Hold", "description": "LAST flutter hold - 10 seconds!", "type": "timer", "duration": 10, "rest": 30, "reps": 1},
+                            
+                            // STRETCHING
+                            {"name": "🧘 STRETCHING TIME!", "description": "AMAZING JOB! 🎉 Now let's recover those muscles. 10 min stretch.", "type": "timer", "duration": 5, "rest": 0, "reps": 1},
+                            {"name": "Butterfly Stretch", "description": "Sit, soles of feet together. Gently press knees down. 45 sec.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Side Lunge - LEFT focus", "description": "Focus on left adductors. Go slow! 45 sec.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Supine IT Band Stretch - RIGHT", "description": "On back, right leg across body. Focus on IT band. 45 sec.", "type": "timer", "duration": 45, "rest": 5, "reps": 1},
+                            {"name": "Pigeon Pose - LEFT", "description": "Deep hip opener. Breathe into it. 60 sec.", "type": "timer", "duration": 60, "rest": 5, "reps": 1},
+                            {"name": "Pigeon Pose - RIGHT", "description": "Switch sides. Relax and breathe. 60 sec.", "type": "timer", "duration": 60, "rest": 5, "reps": 1},
+                            {"name": "Quad Stretch - LEFT", "description": "Standing or lying. 30 sec each.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "Quad Stretch - RIGHT", "description": "Switch legs. Feel the stretch.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "Calf Stretch - LEFT", "description": "Against wall or step. 30 sec.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "Calf Stretch - RIGHT", "description": "Switch legs.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "Hip Flexor Stretch - LEFT", "description": "Lunge position, push hips forward. 30 sec.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "Hip Flexor Stretch - RIGHT", "description": "Switch sides.", "type": "timer", "duration": 30, "rest": 5, "reps": 1},
+                            {"name": "🎉 WORKOUT COMPLETE!", "description": "You're a BEAST! Patrick is proud of you! 💪🔥💚", "type": "timer", "duration": 10, "rest": 0, "reps": 1}
                         ]
                     }
                 };
