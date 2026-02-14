@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deezer Embed Test - Patrick Workout</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; color: white; font-family: -apple-system, sans-serif; min-height: 100vh; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 10px; font-size: 1.3em; }
+    h2 { text-align: center; margin-bottom: 20px; font-size: 1em; opacity: 0.6; }
+    
+    .workout-sim {
+        background: rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .exercise-name { font-size: 1.4em; font-weight: 700; margin-bottom: 8px; }
+    .exercise-info { opacity: 0.6; margin-bottom: 15px; }
+    .timer { font-size: 3em; font-weight: 700; color: #06d6a0; font-variant-numeric: tabular-nums; }
+    
+    .player-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    .player-label { font-size: 0.85em; opacity: 0.5; margin-bottom: 10px; text-align: center; }
+    
+    .player-options { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+    .player-btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+        color: white;
+        cursor: pointer;
+        font-size: 0.85em;
+    }
+    .player-btn.active { background: #a238ff; border-color: #a238ff; }
+    
+    iframe { border-radius: 12px; width: 100%; }
+    
+    .note { text-align: center; opacity: 0.4; font-size: 0.75em; margin-top: 15px; padding: 0 10px; }
+</style>
+</head>
+<body>
+
+<h1>💪 Patrick Workout</h1>
+<h2>Deezer Player Test</h2>
+
+<!-- Simulated workout view -->
+<div class="workout-sim">
+    <div class="exercise-name">🍑 Clamshells</div>
+    <div class="exercise-info">15 each side</div>
+    <div class="timer">0:45</div>
+</div>
+
+<!-- Deezer embedded player -->
+<div class="player-section">
+    <div class="player-label">🎵 Musica Workout</div>
+    
+    <div class="player-options">
+        <button class="player-btn active" onclick="switchPlaylist('workout')">🔥 Energy</button>
+        <button class="player-btn" onclick="switchPlaylist('stretch')">🧘 Stretch</button>
+        <button class="player-btn" onclick="switchPlaylist('hiphop')">🎤 Hip-Hop</button>
+    </div>
+    
+    <!-- Compact player (height 80) -->
+    <div id="player-compact">
+        <iframe id="dz-compact" scrolling="no" frameborder="0" allowTransparency="true" 
+            src="https://widget.deezer.com/widget/dark/playlist/14887523163?tracklist=false&radius=true" 
+            width="100%" height="80"></iframe>
+    </div>
+    
+    <!-- Full player with tracklist (height 300) - toggle -->
+    <div id="player-full" style="display:none;">
+        <iframe id="dz-full" scrolling="no" frameborder="0" allowTransparency="true" 
+            src="" 
+            width="100%" height="300"></iframe>
+    </div>
+    
+    <div style="text-align:center; margin-top:10px;">
+        <button class="player-btn" onclick="togglePlayer()">📋 Mostra/Nascondi tracklist</button>
+    </div>
+</div>
+
+<div class="note">
+    Deezer embed gratuito — brani completi con pubblicità occasionale.<br>
+    Prova i 3 stili e il toggle tracklist.
+</div>
+
+<script>
+const playlists = {
+    workout: '14887523163',  // HIGH ENERGY WORKOUT 2026
+    stretch: '13238084843',  // Stretching Pilate Yoga
+    hiphop: '11662183664'    // HIGH ENERGY RAP
+};
+
+let currentPlaylist = 'workout';
+let showFull = false;
+
+function switchPlaylist(type) {
+    currentPlaylist = type;
+    const id = playlists[type];
+    document.getElementById('dz-compact').src = `https://widget.deezer.com/widget/dark/playlist/${id}?tracklist=false&radius=true`;
+    if (showFull) {
+        document.getElementById('dz-full').src = `https://widget.deezer.com/widget/dark/playlist/${id}?radius=true`;
+    }
+    document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function togglePlayer() {
+    showFull = !showFull;
+    const compact = document.getElementById('player-compact');
+    const full = document.getElementById('player-full');
+    if (showFull) {
+        compact.style.display = 'none';
+        full.style.display = 'block';
+        document.getElementById('dz-full').src = `https://widget.deezer.com/widget/dark/playlist/${playlists[currentPlaylist]}?radius=true`;
+    } else {
+        compact.style.display = 'block';
+        full.style.display = 'none';
+        document.getElementById('dz-full').src = '';
+    }
+}
+</script>
+</body>
+</html>
