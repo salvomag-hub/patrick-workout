@@ -48,6 +48,7 @@
                 linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.25) 100%),
                 url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=800&q=80') center/cover;
             filter: blur(2px) saturate(1.1);
+            pointer-events: none;
         }
         .particles { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .particle {
@@ -151,7 +152,7 @@
             padding: 20px;
             padding-bottom: 120px;
             position: relative;
-            z-index: 2;
+            z-index: 5;
         }
         
         .view.active {
@@ -280,7 +281,6 @@
         
         .modal-overlay {
             z-index: 200;
-            position: relative;
         }
         .modal {
             background: rgba(0,0,0,0.85);
