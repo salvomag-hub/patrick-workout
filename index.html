@@ -572,11 +572,11 @@
             position: absolute;
         }
         
-        /* Playlist Button */
-        .playlist-btn {
-            background: #1DB954;
+        /* Radio Toggle Button */
+        .radio-toggle-btn {
+            background: rgba(255,255,255,0.1);
             color: white;
-            border: none;
+            border: 1px solid rgba(255,255,255,0.2);
             padding: 10px 20px;
             border-radius: 25px;
             font-size: 0.95rem;
@@ -587,137 +587,75 @@
             transition: transform 0.1s, background 0.2s;
             margin-top: 10px;
         }
-        .playlist-btn:active {
-            transform: scale(0.95);
-        }
-        .playlist-btn:hover {
-            background: #1ed760;
-        }
-        
-        /* Playlist Modal */
-        .playlist-overlay {
+        .radio-toggle-btn:active { transform: scale(0.95); }
+        .radio-toggle-btn.radio-on { background: rgba(6,214,160,0.2); border-color: #06d6a0; }
+
+        /* Radio Player */
+        .radio-player {
             display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 300;
-            align-items: flex-end;
-            justify-content: center;
-        }
-        .playlist-overlay.active {
-            display: flex;
-        }
-        .playlist-panel {
-            background: rgba(22, 33, 62, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px 20px 0 0;
-            padding: 24px;
-            width: 100%;
-            max-width: 480px;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s ease-out;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .playlist-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .playlist-panel-header h3 {
-            font-size: 1.2rem;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .playlist-close {
-            background: none; border: none; color: #888;
-            font-size: 1.5rem; cursor: pointer; padding: 5px;
-        }
-        .playlist-close:hover { color: #fff; }
-        .playlist-section {
-            margin-bottom: 20px;
-            padding: 16px;
             background: rgba(255,255,255,0.05);
-            border-radius: 12px;
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 400px;
         }
-        .playlist-section-label {
-            font-size: 0.8rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        .radio-player.visible { display: block; }
+        .radio-player-label { font-size: 0.85em; opacity: 0.5; margin-bottom: 10px; text-align: center; }
+        .genre-tabs { display: flex; gap: 8px; margin-bottom: 12px; justify-content: center; flex-wrap: wrap; }
+        .genre-tab {
+            padding: 8px 14px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color: white;
+            cursor: pointer; font-size: 0.8em; transition: all 0.2s;
         }
-        .playlist-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
+        .genre-tab.active { background: #06d6a0; border-color: #06d6a0; color: #000; font-weight: 600; }
+        .station-list { max-height: 200px; overflow-y: auto; margin-bottom: 12px; scrollbar-width: thin; }
+        .station-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s;
         }
-        .playlist-item-info {
-            display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+        .station-item:hover { background: rgba(255,255,255,0.08); }
+        .station-item.playing { background: rgba(6,214,160,0.15); border-left: 3px solid #06d6a0; }
+        .station-logo {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: rgba(255,255,255,0.1); display: flex;
+            align-items: center; justify-content: center; font-size: 1.2em; overflow: hidden;
         }
-        .playlist-item-icon {
-            font-size: 1.8rem;
+        .station-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .station-name { font-size: 0.9em; font-weight: 600; }
+        .station-tags { font-size: 0.7em; opacity: 0.5; }
+        .now-playing {
+            display: none; align-items: center; gap: 12px;
+            padding: 12px; background: rgba(6,214,160,0.1);
+            border-radius: 12px; margin-bottom: 12px;
         }
-        .playlist-item-name {
-            font-weight: 600;
-            font-size: 1rem;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        .now-playing.active { display: flex; }
+        .np-info { flex: 1; }
+        .np-name { font-size: 0.9em; font-weight: 700; }
+        .np-genre { font-size: 0.75em; opacity: 0.5; }
+        .np-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.15); color: white;
+            font-size: 1.1em; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
         }
-        .playlist-open-btn {
-            background: #1DB954;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.2s;
+        .eq-bars { display: flex; gap: 2px; height: 20px; align-items: flex-end; }
+        .eq-bar { width: 3px; background: #06d6a0; border-radius: 2px; animation: equalize 0.8s ease infinite alternate; }
+        .eq-bar:nth-child(1) { animation-duration: 0.6s; height: 8px; }
+        .eq-bar:nth-child(2) { animation-duration: 0.9s; height: 14px; }
+        .eq-bar:nth-child(3) { animation-duration: 0.7s; height: 10px; }
+        .eq-bar:nth-child(4) { animation-duration: 1.1s; height: 16px; }
+        @keyframes equalize { from { height: 4px; } to { height: 20px; } }
+        .volume-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+        .volume-row span { font-size: 0.8em; opacity: 0.5; }
+        .volume-slider {
+            flex: 1; -webkit-appearance: none; height: 4px;
+            border-radius: 2px; background: rgba(255,255,255,0.2); outline: none;
         }
-        .playlist-open-btn:hover { background: #1ed760; }
-        .playlist-remove-btn {
-            background: #c0392b;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .playlist-custom-input {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .playlist-custom-input input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-        .playlist-custom-input input:focus {
-            border-color: #1DB954;
-            outline: none;
-        }
-        .playlist-save-btn {
-            background: #1DB954;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-weight: 600;
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 16px; height: 16px;
+            border-radius: 50%; background: #06d6a0; cursor: pointer;
         }
     </style>
 </head>
@@ -781,7 +719,32 @@
             <div class="exercise-description" id="currentExerciseDesc">
                 Piedi larghezza spalle, scendi fino a cosce parallele al suolo.
             </div>
-            <button class="playlist-btn" onclick="openPlaylistModal()">🎵 Playlist</button>
+            <button class="radio-toggle-btn" id="radioToggleBtn" onclick="toggleRadioPanel()">📻 Radio</button>
+            <div class="radio-player" id="radioPlayer">
+                <div class="radio-player-label">📻 MJ Radio Workout</div>
+                <div class="genre-tabs" id="genreTabs">
+                    <button class="genre-tab active" onclick="loadGenre('energy', this)">🔥 Energy</button>
+                    <button class="genre-tab" onclick="loadGenre('chill', this)">🧘 Chill</button>
+                    <button class="genre-tab" onclick="loadGenre('hiphop', this)">🎤 Hip-Hop</button>
+                    <button class="genre-tab" onclick="loadGenre('dance', this)">💃 Dance</button>
+                </div>
+                <div class="now-playing" id="nowPlaying">
+                    <div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div>
+                    <div class="np-info">
+                        <div class="np-name" id="npName">—</div>
+                        <div class="np-genre" id="npGenre">—</div>
+                    </div>
+                    <div><button class="np-btn" onclick="stopRadio()">⏹</button></div>
+                </div>
+                <div class="volume-row">
+                    <span>🔈</span>
+                    <input type="range" class="volume-slider" id="radioVolume" min="0" max="100" value="80" oninput="setRadioVolume(this.value)">
+                    <span>🔊</span>
+                </div>
+                <div class="station-list" id="stationList">
+                    <div style="text-align:center;opacity:0.5;padding:20px;">Caricamento stazioni...</div>
+                </div>
+            </div>
             <div class="timer-display" id="timerDisplay">0:30</div>
             <div class="workout-controls">
                 <button class="btn secondary" onclick="prevExercise()">⏮</button>
@@ -886,10 +849,8 @@
         </div>
     </div>
     
-    <!-- Playlist Modal -->
-    <div class="playlist-overlay" id="playlistOverlay" onclick="if(event.target===this)closePlaylistModal()">
-        <div class="playlist-panel" id="playlistPanel"></div>
-    </div>
+    <!-- Radio Audio Element -->
+    <audio id="radioAudio" preload="none"></audio>
 
     <!-- Complete Modal -->
     <div class="modal-overlay" id="completeModal">
@@ -1492,16 +1453,8 @@
             audioCtx.resume();
             showCurrentExercise();
             
-            // Auto-open playlist on workout start
-            const customPlaylists = getCustomPlaylists();
-            const playlistUrl = customPlaylists[currentWorkoutId] || (() => {
-                const cat = getWorkoutCategory(workout);
-                return (DEFAULT_PLAYLISTS[cat] || DEFAULT_PLAYLISTS['default']).url;
-            })();
-            if (playlistUrl) {
-                const openIt = confirm('🎵 Vuoi aprire la playlist per questo workout?');
-                if (openIt) window.open(playlistUrl, '_blank');
-            }
+            // Auto-load radio stations (energy by default)
+            loadGenre('energy', document.querySelector('.genre-tab'));
         }
         
         function exitWorkout() {
@@ -1511,6 +1464,7 @@
                     clearInterval(animationInterval);
                     animationInterval = null;
                 }
+                stopRadio();
                 releaseWakeLock();
                 document.getElementById('workoutView').classList.remove('active');
                 document.getElementById('listView').classList.add('active');
@@ -1757,108 +1711,101 @@
             alert('Workout salvati: ' + Object.keys(workouts).length + '\nWorkout corrente: ' + getCurrentWorkout().name);
         }
         
-        // === PLAYLIST FEATURE ===
-        const DEFAULT_PLAYLISTS = {
-            'strength': { name: 'Beast Mode', url: 'https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP', icon: '🏋️' },
-            'hiit': { name: 'HIIT Workout', url: 'https://open.spotify.com/playlist/37i9dQZF1DX0HRj9P7NxeE', icon: '🔥' },
-            'core': { name: 'Workout Beats', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfnE5v', icon: '💪' },
-            'stretching': { name: 'Yoga & Meditation', url: 'https://open.spotify.com/playlist/37i9dQZF1DX9uKNf5jGX6m', icon: '🧘' },
-            'cardio': { name: 'Cardio', url: 'https://open.spotify.com/playlist/37i9dQZF1DX0HRj9P7NxeE', icon: '🏃' },
-            'default': { name: 'Power Workout', url: 'https://open.spotify.com/playlist/37i9dQZF1DX2sUQwD7tbmL', icon: '🎵' }
+        // === MJ RADIO ===
+        const RADIO_API = 'https://de1.api.radio-browser.info/json';
+        const radioAudio = document.getElementById('radioAudio');
+        let currentStation = null;
+
+        const GENRES = {
+            energy: { tags: 'workout,fitness,energy', fallback: 'dance,electronic,edm', name: 'Energy' },
+            chill: { tags: 'chill,chillout,ambient,lounge', fallback: 'yoga,meditation,relaxation', name: 'Chill' },
+            hiphop: { tags: 'hip hop,hiphop,rap', fallback: 'urban,r&b,rnb', name: 'Hip-Hop' },
+            dance: { tags: 'dance,house,edm,electronic', fallback: 'club,techno,trance', name: 'Dance' }
         };
 
-        function getWorkoutCategory(workout) {
-            const text = ((workout.name || '') + ' ' + (workout.exercises || []).map(e => e.name + ' ' + (e.description || '')).join(' ')).toLowerCase();
-            if (/core|abs|addominal/.test(text)) return 'core';
-            if (/stretch|yoga|mobilit[àa]|flexibility/.test(text)) return 'stretching';
-            if (/hiit|tabata|interval/.test(text)) return 'hiit';
-            if (/cardio|run|corsa/.test(text)) return 'cardio';
-            if (/strength|forza|push|pull|squat|legs/.test(text)) return 'strength';
-            return 'default';
+        function toggleRadioPanel() {
+            const panel = document.getElementById('radioPlayer');
+            const btn = document.getElementById('radioToggleBtn');
+            panel.classList.toggle('visible');
+            btn.classList.toggle('radio-on', panel.classList.contains('visible'));
         }
 
-        function getCustomPlaylists() {
-            try { return JSON.parse(localStorage.getItem('patrickCustomPlaylists') || '{}'); } catch(e) { return {}; }
-        }
+        async function loadGenre(genre, tabEl) {
+            document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
+            if (tabEl) tabEl.classList.add('active');
 
-        function saveCustomPlaylist(key, url) {
-            const cp = getCustomPlaylists();
-            cp[key] = url;
-            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(cp));
-        }
+            const list = document.getElementById('stationList');
+            list.innerHTML = '<div style="text-align:center;opacity:0.5;padding:20px;">Caricamento...</div>';
 
-        function removeCustomPlaylist(key) {
-            const cp = getCustomPlaylists();
-            delete cp[key];
-            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(cp));
-        }
+            const g = GENRES[genre];
+            let stations = [];
 
-        function openPlaylistModal() {
-            const workout = getCurrentWorkout();
-            const category = getWorkoutCategory(workout);
-            const recommended = DEFAULT_PLAYLISTS[category] || DEFAULT_PLAYLISTS['default'];
-            const customPlaylists = getCustomPlaylists();
-            const customUrl = customPlaylists[currentWorkoutId] || '';
-
-            let customHtml = '';
-            if (customUrl) {
-                customHtml = `
-                    <div class="playlist-section">
-                        <div class="playlist-section-label">📌 La tua playlist salvata</div>
-                        <div class="playlist-item">
-                            <div class="playlist-item-info">
-                                <span class="playlist-item-icon">🎧</span>
-                                <span class="playlist-item-name" style="font-size:0.85rem;">${customUrl.length > 40 ? customUrl.substring(0,40)+'...' : customUrl}</span>
-                            </div>
-                            <div style="display:flex;gap:6px;">
-                                <a href="${customUrl}" target="_blank" class="playlist-open-btn">Apri</a>
-                                <button class="playlist-remove-btn" onclick="removeCustomAndRefresh()">✕</button>
-                            </div>
-                        </div>
-                    </div>`;
+            for (const tagSet of [g.tags, g.fallback]) {
+                for (const tag of tagSet.split(',')) {
+                    try {
+                        const resp = await fetch(`${RADIO_API}/stations/search?tag=${tag.trim()}&limit=15&order=clickcount&reverse=true&lastcheckok=1`);
+                        const data = await resp.json();
+                        const https = data.filter(s => s.url_resolved?.startsWith('https'));
+                        stations = [...stations, ...https];
+                    } catch(e) {}
+                }
+                if (stations.length >= 5) break;
             }
 
-            document.getElementById('playlistPanel').innerHTML = `
-                <div class="playlist-panel-header">
-                    <h3>🎵 Playlist</h3>
-                    <button class="playlist-close" onclick="closePlaylistModal()">✕</button>
-                </div>
-                <div class="playlist-section">
-                    <div class="playlist-section-label">🤖 Consigliata da MaryJane</div>
-                    <div class="playlist-item">
-                        <div class="playlist-item-info">
-                            <span class="playlist-item-icon">${recommended.icon}</span>
-                            <span class="playlist-item-name">${recommended.name}</span>
-                        </div>
-                        <a href="${recommended.url}" target="_blank" class="playlist-open-btn">Apri su Spotify</a>
+            const seen = new Set();
+            stations = stations.filter(s => {
+                const key = s.name.toLowerCase().trim();
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            }).slice(0, 12);
+
+            list.innerHTML = stations.map((s, i) => `
+                <div class="station-item" id="st-${i}" onclick='playStation(${JSON.stringify({
+                    name: s.name, url: s.url_resolved || s.url, favicon: s.favicon, tags: s.tags
+                }).replace(/'/g, "\\'")}, ${i})'>
+                    <div class="station-logo">
+                        ${s.favicon ? `<img src="${s.favicon}" onerror="this.parentElement.textContent='📻'">` : '📻'}
+                    </div>
+                    <div>
+                        <div class="station-name">${s.name.substring(0, 30)}</div>
+                        <div class="station-tags">${(s.tags || '').split(',').slice(0,3).join(', ')}</div>
                     </div>
                 </div>
-                ${customHtml}
-                <div class="playlist-section">
-                    <div class="playlist-section-label">🎶 La tua playlist</div>
-                    <div class="playlist-custom-input">
-                        <input type="url" id="customPlaylistUrl" placeholder="Incolla URL Spotify / Apple Music / YouTube Music" value="">
-                        <button class="playlist-save-btn" onclick="saveCustomAndRefresh()">Salva</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('playlistOverlay').classList.add('active');
+            `).join('');
         }
 
-        function closePlaylistModal() {
-            document.getElementById('playlistOverlay').classList.remove('active');
+        function playStation(station, idx) {
+            radioAudio.pause();
+            radioAudio.src = '';
+            document.querySelectorAll('.station-item').forEach(s => s.classList.remove('playing'));
+
+            radioAudio.src = station.url;
+            radioAudio.volume = document.getElementById('radioVolume').value / 100;
+            radioAudio.play().catch(e => console.log('Radio play error:', e));
+
+            currentStation = station;
+            document.getElementById(`st-${idx}`).classList.add('playing');
+
+            document.getElementById('npName').textContent = station.name;
+            document.getElementById('npGenre').textContent = station.tags?.split(',').slice(0,3).join(', ') || '';
+            document.getElementById('nowPlaying').classList.add('active');
+
+            // Update toggle button to show radio is on
+            document.getElementById('radioToggleBtn').classList.add('radio-on');
         }
 
-        function saveCustomAndRefresh() {
-            const url = document.getElementById('customPlaylistUrl').value.trim();
-            if (!url) return;
-            saveCustomPlaylist(currentWorkoutId, url);
-            openPlaylistModal(); // refresh
+        function stopRadio() {
+            radioAudio.pause();
+            radioAudio.src = '';
+            currentStation = null;
+            document.querySelectorAll('.station-item').forEach(s => s.classList.remove('playing'));
+            document.getElementById('nowPlaying').classList.remove('active');
+            document.getElementById('radioToggleBtn').classList.remove('radio-on');
         }
 
-        function removeCustomAndRefresh() {
-            removeCustomPlaylist(currentWorkoutId);
-            openPlaylistModal(); // refresh
+        function setRadioVolume(val) {
+            radioAudio.volume = val / 100;
         }
 
         // Init
