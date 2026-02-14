@@ -719,7 +719,10 @@
             <div class="exercise-description" id="currentExerciseDesc">
                 Piedi larghezza spalle, scendi fino a cosce parallele al suolo.
             </div>
-            <button class="radio-toggle-btn" id="radioToggleBtn" onclick="toggleRadioPanel()">📻 MJ Radio</button>
+            <div style="display:flex;gap:8px;justify-content:center;margin:10px 0;">
+                <button class="radio-toggle-btn" id="radioToggleBtn" onclick="toggleRadioPanel()">📻 MJ Radio</button>
+                <button class="radio-toggle-btn" id="playlistToggleBtn" onclick="togglePlaylistPanel()">🎵 La tua Playlist</button>
+            </div>
             <div class="radio-player" id="radioPlayer">
                 <div class="radio-player-label">📻 MJ Radio Workout</div>
                 <div class="genre-tabs" id="genreTabs">
@@ -744,6 +747,25 @@
                 <div class="station-list" id="stationList">
                     <div style="text-align:center;opacity:0.5;padding:20px;">Caricamento stazioni...</div>
                 </div>
+            </div>
+            <div class="radio-player" id="playlistPanel" style="display:none;">
+                <div class="radio-player-label">🎵 La tua Playlist</div>
+                <div id="savedPlaylistArea" style="display:none;margin-bottom:12px;">
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(29,185,84,0.1);border-radius:12px;">
+                        <span style="font-size:1.5em;">🎵</span>
+                        <div style="flex:1;">
+                            <div style="font-size:0.85em;font-weight:600;" id="savedPlaylistName">Playlist salvata</div>
+                            <div style="font-size:0.7em;opacity:0.5;" id="savedPlaylistUrl"></div>
+                        </div>
+                        <a id="openPlaylistBtn" href="#" target="_blank" style="padding:6px 14px;background:#1DB954;color:#fff;border-radius:16px;text-decoration:none;font-size:0.8em;font-weight:600;">Apri ▶</a>
+                        <button onclick="removeCustomPlaylist()" style="background:rgba(255,255,255,0.1);border:none;color:#ff6b6b;border-radius:50%;width:30px;height:30px;cursor:pointer;">✕</button>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <input type="url" id="customPlaylistInput" placeholder="Incolla URL Spotify / Apple Music / YouTube Music" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:white;font-size:0.85em;">
+                </div>
+                <button onclick="saveCustomPlaylist()" style="width:100%;padding:10px;border-radius:12px;border:none;background:#1DB954;color:white;font-weight:600;font-size:0.9em;cursor:pointer;">💾 Salva per questo workout</button>
+                <div style="text-align:center;opacity:0.4;font-size:0.7em;margin-top:10px;">La playlist si apre nell'app esterna (Spotify, Apple Music, etc.)</div>
             </div>
             <div class="timer-display" id="timerDisplay">0:30</div>
             <div class="workout-controls">
@@ -1726,8 +1748,59 @@
         function toggleRadioPanel() {
             const panel = document.getElementById('radioPlayer');
             const btn = document.getElementById('radioToggleBtn');
+            // Close playlist panel if open
+            document.getElementById('playlistPanel').style.display = 'none';
+            document.getElementById('playlistToggleBtn').classList.remove('radio-on');
             panel.classList.toggle('visible');
             btn.classList.toggle('radio-on', panel.classList.contains('visible'));
+        }
+
+        function togglePlaylistPanel() {
+            const panel = document.getElementById('playlistPanel');
+            const btn = document.getElementById('playlistToggleBtn');
+            // Close radio panel if open
+            document.getElementById('radioPlayer').classList.remove('visible');
+            document.getElementById('radioToggleBtn').classList.remove('radio-on');
+            const isVisible = panel.style.display === 'block';
+            panel.style.display = isVisible ? 'none' : 'block';
+            btn.classList.toggle('radio-on', !isVisible);
+            if (!isVisible) loadSavedPlaylist();
+        }
+
+        function getCustomPlaylists() {
+            try { return JSON.parse(localStorage.getItem('patrickCustomPlaylists') || '{}'); } catch(e) { return {}; }
+        }
+
+        function loadSavedPlaylist() {
+            const playlists = getCustomPlaylists();
+            const url = playlists[currentWorkoutId] || '';
+            const area = document.getElementById('savedPlaylistArea');
+            if (url) {
+                area.style.display = 'block';
+                document.getElementById('savedPlaylistUrl').textContent = url.substring(0, 40) + '...';
+                document.getElementById('savedPlaylistName').textContent = url.includes('spotify') ? '🟢 Spotify' : url.includes('apple') ? '🍎 Apple Music' : url.includes('youtube') ? '▶️ YouTube Music' : '🎵 Playlist';
+                document.getElementById('openPlaylistBtn').href = url;
+            } else {
+                area.style.display = 'none';
+            }
+        }
+
+        function saveCustomPlaylist() {
+            const url = document.getElementById('customPlaylistInput').value.trim();
+            if (!url) { alert('Incolla un URL!'); return; }
+            const playlists = getCustomPlaylists();
+            playlists[currentWorkoutId] = url;
+            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(playlists));
+            document.getElementById('customPlaylistInput').value = '';
+            loadSavedPlaylist();
+            alert('Playlist salvata! 🎵');
+        }
+
+        function removeCustomPlaylist() {
+            const playlists = getCustomPlaylists();
+            delete playlists[currentWorkoutId];
+            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(playlists));
+            loadSavedPlaylist();
         }
 
         async function loadGenre(genre, tabEl) {
