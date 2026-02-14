@@ -571,6 +571,154 @@
             font-size: 3rem;
             position: absolute;
         }
+        
+        /* Playlist Button */
+        .playlist-btn {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.1s, background 0.2s;
+            margin-top: 10px;
+        }
+        .playlist-btn:active {
+            transform: scale(0.95);
+        }
+        .playlist-btn:hover {
+            background: #1ed760;
+        }
+        
+        /* Playlist Modal */
+        .playlist-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 300;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .playlist-overlay.active {
+            display: flex;
+        }
+        .playlist-panel {
+            background: rgba(22, 33, 62, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px 20px 0 0;
+            padding: 24px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .playlist-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .playlist-panel-header h3 {
+            font-size: 1.2rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .playlist-close {
+            background: none; border: none; color: #888;
+            font-size: 1.5rem; cursor: pointer; padding: 5px;
+        }
+        .playlist-close:hover { color: #fff; }
+        .playlist-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+        .playlist-section-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .playlist-item-info {
+            display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+        }
+        .playlist-item-icon {
+            font-size: 1.8rem;
+        }
+        .playlist-item-name {
+            font-weight: 600;
+            font-size: 1rem;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .playlist-open-btn {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .playlist-open-btn:hover { background: #1ed760; }
+        .playlist-remove-btn {
+            background: #c0392b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .playlist-custom-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .playlist-custom-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        .playlist-custom-input input:focus {
+            border-color: #1DB954;
+            outline: none;
+        }
+        .playlist-save-btn {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -633,6 +781,7 @@
             <div class="exercise-description" id="currentExerciseDesc">
                 Piedi larghezza spalle, scendi fino a cosce parallele al suolo.
             </div>
+            <button class="playlist-btn" onclick="openPlaylistModal()">🎵 Playlist</button>
             <div class="timer-display" id="timerDisplay">0:30</div>
             <div class="workout-controls">
                 <button class="btn secondary" onclick="prevExercise()">⏮</button>
@@ -737,6 +886,11 @@
         </div>
     </div>
     
+    <!-- Playlist Modal -->
+    <div class="playlist-overlay" id="playlistOverlay" onclick="if(event.target===this)closePlaylistModal()">
+        <div class="playlist-panel" id="playlistPanel"></div>
+    </div>
+
     <!-- Complete Modal -->
     <div class="modal-overlay" id="completeModal">
         <div class="modal">
@@ -1592,6 +1746,110 @@
             alert('Workout salvati: ' + Object.keys(workouts).length + '\nWorkout corrente: ' + getCurrentWorkout().name);
         }
         
+        // === PLAYLIST FEATURE ===
+        const DEFAULT_PLAYLISTS = {
+            'strength': { name: 'Beast Mode', url: 'https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP', icon: '🏋️' },
+            'hiit': { name: 'HIIT Workout', url: 'https://open.spotify.com/playlist/37i9dQZF1DX0HRj9P7NxeE', icon: '🔥' },
+            'core': { name: 'Workout Beats', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfnE5v', icon: '💪' },
+            'stretching': { name: 'Yoga & Meditation', url: 'https://open.spotify.com/playlist/37i9dQZF1DX9uKNf5jGX6m', icon: '🧘' },
+            'cardio': { name: 'Cardio', url: 'https://open.spotify.com/playlist/37i9dQZF1DX0HRj9P7NxeE', icon: '🏃' },
+            'default': { name: 'Power Workout', url: 'https://open.spotify.com/playlist/37i9dQZF1DX2sUQwD7tbmL', icon: '🎵' }
+        };
+
+        function getWorkoutCategory(workout) {
+            const text = ((workout.name || '') + ' ' + (workout.exercises || []).map(e => e.name + ' ' + (e.description || '')).join(' ')).toLowerCase();
+            if (/core|abs|addominal/.test(text)) return 'core';
+            if (/stretch|yoga|mobilit[àa]|flexibility/.test(text)) return 'stretching';
+            if (/hiit|tabata|interval/.test(text)) return 'hiit';
+            if (/cardio|run|corsa/.test(text)) return 'cardio';
+            if (/strength|forza|push|pull|squat|legs/.test(text)) return 'strength';
+            return 'default';
+        }
+
+        function getCustomPlaylists() {
+            try { return JSON.parse(localStorage.getItem('patrickCustomPlaylists') || '{}'); } catch(e) { return {}; }
+        }
+
+        function saveCustomPlaylist(key, url) {
+            const cp = getCustomPlaylists();
+            cp[key] = url;
+            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(cp));
+        }
+
+        function removeCustomPlaylist(key) {
+            const cp = getCustomPlaylists();
+            delete cp[key];
+            localStorage.setItem('patrickCustomPlaylists', JSON.stringify(cp));
+        }
+
+        function openPlaylistModal() {
+            const workout = getCurrentWorkout();
+            const category = getWorkoutCategory(workout);
+            const recommended = DEFAULT_PLAYLISTS[category] || DEFAULT_PLAYLISTS['default'];
+            const customPlaylists = getCustomPlaylists();
+            const customUrl = customPlaylists[currentWorkoutId] || '';
+
+            let customHtml = '';
+            if (customUrl) {
+                customHtml = `
+                    <div class="playlist-section">
+                        <div class="playlist-section-label">📌 La tua playlist salvata</div>
+                        <div class="playlist-item">
+                            <div class="playlist-item-info">
+                                <span class="playlist-item-icon">🎧</span>
+                                <span class="playlist-item-name" style="font-size:0.85rem;">${customUrl.length > 40 ? customUrl.substring(0,40)+'...' : customUrl}</span>
+                            </div>
+                            <div style="display:flex;gap:6px;">
+                                <a href="${customUrl}" target="_blank" class="playlist-open-btn">Apri</a>
+                                <button class="playlist-remove-btn" onclick="removeCustomAndRefresh()">✕</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            document.getElementById('playlistPanel').innerHTML = `
+                <div class="playlist-panel-header">
+                    <h3>🎵 Playlist</h3>
+                    <button class="playlist-close" onclick="closePlaylistModal()">✕</button>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-section-label">🤖 Consigliata da MaryJane</div>
+                    <div class="playlist-item">
+                        <div class="playlist-item-info">
+                            <span class="playlist-item-icon">${recommended.icon}</span>
+                            <span class="playlist-item-name">${recommended.name}</span>
+                        </div>
+                        <a href="${recommended.url}" target="_blank" class="playlist-open-btn">Apri su Spotify</a>
+                    </div>
+                </div>
+                ${customHtml}
+                <div class="playlist-section">
+                    <div class="playlist-section-label">🎶 La tua playlist</div>
+                    <div class="playlist-custom-input">
+                        <input type="url" id="customPlaylistUrl" placeholder="Incolla URL Spotify / Apple Music / YouTube Music" value="">
+                        <button class="playlist-save-btn" onclick="saveCustomAndRefresh()">Salva</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('playlistOverlay').classList.add('active');
+        }
+
+        function closePlaylistModal() {
+            document.getElementById('playlistOverlay').classList.remove('active');
+        }
+
+        function saveCustomAndRefresh() {
+            const url = document.getElementById('customPlaylistUrl').value.trim();
+            if (!url) return;
+            saveCustomPlaylist(currentWorkoutId, url);
+            openPlaylistModal(); // refresh
+        }
+
+        function removeCustomAndRefresh() {
+            removeCustomPlaylist(currentWorkoutId);
+            openPlaylistModal(); // refresh
+        }
+
         // Init
         loadData();
         checkUrlImport();
