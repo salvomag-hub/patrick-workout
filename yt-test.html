@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Player - Patrick Workout</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; color: white; font-family: -apple-system, sans-serif; min-height: 100vh; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 10px; font-size: 1.3em; }
+    h2 { text-align: center; margin-bottom: 20px; font-size: 1em; opacity: 0.6; }
+    
+    .workout-sim {
+        background: rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .exercise-name { font-size: 1.4em; font-weight: 700; margin-bottom: 8px; }
+    .exercise-info { opacity: 0.6; margin-bottom: 15px; }
+    .timer { font-size: 3em; font-weight: 700; color: #06d6a0; font-variant-numeric: tabular-nums; }
+    
+    .player-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 15px;
+    }
+    .player-label { font-size: 0.85em; opacity: 0.5; margin-bottom: 10px; text-align: center; }
+    
+    .genre-tabs { display: flex; gap: 8px; margin-bottom: 12px; justify-content: center; flex-wrap: wrap; }
+    .genre-tab {
+        padding: 8px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+        color: white;
+        cursor: pointer;
+        font-size: 0.8em;
+        transition: all 0.2s;
+    }
+    .genre-tab.active { background: #ff0000; border-color: #ff0000; color: #fff; font-weight: 600; }
+    
+    .yt-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: #000;
+    }
+    .yt-container iframe {
+        width: 100%;
+        display: block;
+    }
+    
+    .size-toggle {
+        display: flex; gap: 8px; justify-content: center; margin-bottom: 12px;
+    }
+    .size-btn {
+        padding: 6px 12px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.05);
+        color: white;
+        cursor: pointer;
+        font-size: 0.75em;
+    }
+    .size-btn.active { background: rgba(255,0,0,0.3); border-color: #ff0000; }
+    
+    .note { text-align: center; opacity: 0.4; font-size: 0.75em; margin-top: 15px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<h1>💪 Patrick Workout</h1>
+<h2>▶️ YouTube Player Test</h2>
+
+<div class="workout-sim">
+    <div class="exercise-name">🍑 Clamshells</div>
+    <div class="exercise-info">15 each side</div>
+    <div class="timer">0:45</div>
+</div>
+
+<div class="player-section">
+    <div class="player-label">🎵 YouTube Music Workout</div>
+    
+    <div class="genre-tabs" id="genreTabs">
+        <button class="genre-tab active" onclick="switchPlaylist('energy')">🔥 Energy</button>
+        <button class="genre-tab" onclick="switchPlaylist('chill')">🧘 Chill</button>
+        <button class="genre-tab" onclick="switchPlaylist('hiphop')">🎤 Hip-Hop</button>
+        <button class="genre-tab" onclick="switchPlaylist('dance')">💃 Dance</button>
+    </div>
+    
+    <div class="size-toggle">
+        <button class="size-btn" onclick="setSize('mini')">Mini</button>
+        <button class="size-btn active" onclick="setSize('compact')">Compatto</button>
+        <button class="size-btn" onclick="setSize('full')">Grande</button>
+    </div>
+    
+    <div class="yt-container" id="ytContainer">
+        <!-- YouTube embed will be injected here -->
+    </div>
+</div>
+
+<div class="note">
+    ⚠️ YouTube: brani completi gratis ma con pubblicità.<br>
+    Su iPhone l'audio potrebbe fermarsi se minimizzi il browser.
+</div>
+
+<script>
+// Real YouTube workout playlist IDs
+const PLAYLISTS = {
+    energy: 'PLgzTt0k8mXzEpH7-dOCHqRZOsakqXmzmG',  // Workout motivation
+    chill: 'PLgzTt0k8mXzEk6pGMOOH4PLXB8JV04eY',      // Chill vibes
+    hiphop: 'PLgzTt0k8mXzELvfMHjBBihE-VR4CBNWBP',    // Hip hop workout
+    dance: 'PLw-VjHDlEOgs658kAHR_LAaILBXb-s6Q5'       // Dance workout
+};
+
+let currentGenre = 'energy';
+let currentSize = 'compact';
+
+const SIZES = {
+    mini: 60,
+    compact: 160,
+    full: 280
+};
+
+function getEmbedUrl(genre) {
+    const plId = PLAYLISTS[genre];
+    return `https://www.youtube.com/embed/videoseries?list=${plId}&autoplay=0&loop=1&rel=0&modestbranding=1`;
+}
+
+function renderPlayer() {
+    const container = document.getElementById('ytContainer');
+    container.innerHTML = `<iframe 
+        src="${getEmbedUrl(currentGenre)}" 
+        height="${SIZES[currentSize]}" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen></iframe>`;
+}
+
+function switchPlaylist(genre) {
+    currentGenre = genre;
+    document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    renderPlayer();
+}
+
+function setSize(size) {
+    currentSize = size;
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderPlayer();
+}
+
+// Initial render
+renderPlayer();
+</script>
+</body>
+</html>
