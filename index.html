@@ -1491,6 +1491,17 @@
             requestWakeLock();
             audioCtx.resume();
             showCurrentExercise();
+            
+            // Auto-open playlist on workout start
+            const customPlaylists = getCustomPlaylists();
+            const playlistUrl = customPlaylists[currentWorkoutId] || (() => {
+                const cat = getWorkoutCategory(workout);
+                return (DEFAULT_PLAYLISTS[cat] || DEFAULT_PLAYLISTS['default']).url;
+            })();
+            if (playlistUrl) {
+                const openIt = confirm('🎵 Vuoi aprire la playlist per questo workout?');
+                if (openIt) window.open(playlistUrl, '_blank');
+            }
         }
         
         function exitWorkout() {
