@@ -96,6 +96,10 @@
         <button class="size-btn" onclick="setSize('full')">Grande</button>
     </div>
     
+    <div style="text-align:center;margin-bottom:8px;">
+        <span id="videoTitle" style="font-size:0.8em;opacity:0.6;"></span>
+        <button class="size-btn" onclick="nextVideo()" style="margin-left:8px;">⏭ Next Mix</button>
+    </div>
     <div class="yt-container" id="ytContainer">
         <!-- YouTube embed will be injected here -->
     </div>
@@ -107,16 +111,33 @@
 </div>
 
 <script>
-// Real YouTube workout playlist IDs
-const PLAYLISTS = {
-    energy: 'PLgzTt0k8mXzEpH7-dOCHqRZOsakqXmzmG',  // Workout motivation
-    chill: 'PLgzTt0k8mXzEk6pGMOOH4PLXB8JV04eY',      // Chill vibes
-    hiphop: 'PLgzTt0k8mXzELvfMHjBBihE-VR4CBNWBP',    // Hip hop workout
-    dance: 'PLw-VjHDlEOgs658kAHR_LAaILBXb-s6Q5'       // Dance workout
+// YouTube video IDs - long workout/music mixes (1-3 hours each)
+const VIDEOS = {
+    energy: [
+        { id: 'qBB_QOZNEdc', title: 'Workout Music Mix 2025 🔥' },
+        { id: 'gRfhqB1sWGo', title: 'Gym Motivation Mix 💪' },
+        { id: 'kYMEjR0jRGE', title: 'Best Workout Music 2025' }
+    ],
+    chill: [
+        { id: 'lTRiuFIWV54', title: 'Lofi Chill Beats 🧘' },
+        { id: 'jfKfPfyJRdk', title: 'Lofi Girl Radio ☕' },
+        { id: '5qap5aO4i9A', title: 'Relaxing Music' }
+    ],
+    hiphop: [
+        { id: 'RviOwY0OKyE', title: 'Hip Hop Workout Mix 🎤' },
+        { id: 'QnL5P0tFkwM', title: 'Rap Gym Mix 💪' },
+        { id: 'M5FGuBatbTg', title: 'Hip Hop Power Mix' }
+    ],
+    dance: [
+        { id: 'mVjYG9TSN88', title: 'EDM Workout Mix 💃' },
+        { id: 'op4bm_RRUBY', title: 'Dance Hits Mix 🎶' },
+        { id: 'hHW1oY26kxQ', title: 'Electronic Energy Mix' }
+    ]
 };
 
 let currentGenre = 'energy';
 let currentSize = 'compact';
+let currentVideoIdx = 0;
 
 const SIZES = {
     mini: 60,
@@ -125,12 +146,14 @@ const SIZES = {
 };
 
 function getEmbedUrl(genre) {
-    const plId = PLAYLISTS[genre];
-    return `https://www.youtube.com/embed/videoseries?list=${plId}&autoplay=0&loop=1&rel=0&modestbranding=1`;
+    const video = VIDEOS[genre][currentVideoIdx % VIDEOS[genre].length];
+    return `https://www.youtube.com/embed/${video.id}?autoplay=0&loop=1&rel=0&modestbranding=1`;
 }
 
 function renderPlayer() {
     const container = document.getElementById('ytContainer');
+    const video = VIDEOS[currentGenre][currentVideoIdx % VIDEOS[currentGenre].length];
+    document.getElementById('videoTitle').textContent = video.title;
     container.innerHTML = `<iframe 
         src="${getEmbedUrl(currentGenre)}" 
         height="${SIZES[currentSize]}" 
@@ -141,8 +164,14 @@ function renderPlayer() {
 
 function switchPlaylist(genre) {
     currentGenre = genre;
+    currentVideoIdx = 0;
     document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
     event.target.classList.add('active');
+    renderPlayer();
+}
+
+function nextVideo() {
+    currentVideoIdx = (currentVideoIdx + 1) % VIDEOS[currentGenre].length;
     renderPlayer();
 }
 
