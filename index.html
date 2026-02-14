@@ -124,15 +124,16 @@
         }
         
         .btn.secondary {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.35);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: #fff;
         }
         
         .btn.secondary:hover {
-            background: rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.35);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
         
@@ -1342,14 +1343,24 @@
         function setupDragDrop() {
             const cards = document.querySelectorAll('.exercise-card');
             cards.forEach(card => {
+                // Desktop drag
                 card.addEventListener('dragstart', handleDragStart);
                 card.addEventListener('dragover', handleDragOver);
                 card.addEventListener('drop', handleDrop);
                 card.addEventListener('dragend', handleDragEnd);
+                // Mobile touch drag (on the handle only)
+                const handle = card.querySelector('.drag-handle');
+                if (handle) {
+                    handle.addEventListener('touchstart', handleTouchStart, {passive: false});
+                    handle.addEventListener('touchmove', handleTouchMove, {passive: false});
+                    handle.addEventListener('touchend', handleTouchEnd, {passive: false});
+                }
             });
         }
         
         let dragSrcIndex = null;
+        let touchDragEl = null;
+        let touchStartY = 0;
         
         function handleDragStart(e) {
             dragSrcIndex = parseInt(this.dataset.index);
@@ -1376,6 +1387,71 @@
         
         function handleDragEnd(e) {
             this.style.opacity = '1';
+        }
+        
+        // Touch drag for mobile
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const card = e.target.closest('.exercise-card');
+            if (!card) return;
+            touchDragEl = card;
+            dragSrcIndex = parseInt(card.dataset.index);
+            touchStartY = e.touches[0].clientY;
+            card.style.opacity = '0.5';
+            card.style.transform = 'scale(1.03)';
+            card.style.zIndex = '100';
+            card.style.transition = 'none';
+        }
+        
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!touchDragEl) return;
+            const touchY = e.touches[0].clientY;
+            const diff = touchY - touchStartY;
+            touchDragEl.style.transform = `translateY(${diff}px) scale(1.03)`;
+            
+            // Find target card
+            const cards = document.querySelectorAll('.exercise-card');
+            cards.forEach(card => {
+                if (card === touchDragEl) return;
+                const rect = card.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    card.style.borderTop = '3px solid #06d6a0';
+                } else {
+                    card.style.borderTop = '';
+                }
+            });
+        }
+        
+        function handleTouchEnd(e) {
+            if (!touchDragEl) return;
+            const touchY = e.changedTouches[0].clientY;
+            
+            // Find drop target
+            const cards = document.querySelectorAll('.exercise-card');
+            let targetIndex = dragSrcIndex;
+            cards.forEach(card => {
+                card.style.borderTop = '';
+                if (card === touchDragEl) return;
+                const rect = card.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    targetIndex = parseInt(card.dataset.index);
+                }
+            });
+            
+            if (dragSrcIndex !== targetIndex) {
+                const workout = getCurrentWorkout();
+                const [removed] = workout.exercises.splice(dragSrcIndex, 1);
+                workout.exercises.splice(targetIndex, 0, removed);
+                saveData();
+                renderExercises();
+            } else {
+                touchDragEl.style.opacity = '';
+                touchDragEl.style.transform = '';
+                touchDragEl.style.zIndex = '';
+                touchDragEl.style.transition = '';
+            }
+            touchDragEl = null;
         }
         
         // Modals
