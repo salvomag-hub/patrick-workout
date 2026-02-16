@@ -2176,6 +2176,10 @@
             radioAudio.src = station.url;
             radioAudio.volume = document.getElementById('radioVolume').value / 100;
             radioAudio.play().catch(e => console.log('Radio play error:', e));
+            
+            // Reduce animations to prevent audio stuttering on mobile
+            document.querySelector('.particles').style.display = 'none';
+            if (animationInterval) { clearInterval(animationInterval); animationInterval = null; }
 
             currentStation = station;
             document.getElementById(`st-${idx}`).classList.add('playing');
@@ -2191,6 +2195,8 @@
         function stopRadio() {
             radioAudio.pause();
             radioAudio.src = '';
+            // Restore animations
+            document.querySelector('.particles').style.display = '';
             currentStation = null;
             document.querySelectorAll('.station-item').forEach(s => s.classList.remove('playing'));
             document.getElementById('nowPlaying').classList.remove('active');
