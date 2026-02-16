@@ -1696,6 +1696,7 @@
             // Crunch / Abs
             'crunch': 'Crunch_-_Hands_Overhead',
             'bicicl': 'Air_Bike',
+            'toe tap': 'CUSTOM:assets/toe-taps.jpg',
             
             // Core / Abs - new additions
             'dead bug': 'Dead_Bug',
@@ -1751,7 +1752,12 @@
             }
             
             if (imageId) {
-                // Use real images
+                if (imageId.startsWith('CUSTOM:')) {
+                    // Custom local image
+                    const customSrc = imageId.replace('CUSTOM:', '');
+                    animDiv.innerHTML = `<img id="exerciseImg" src="${customSrc}" alt="${exerciseName}" onerror="this.parentElement.innerHTML='<span class=\\'emoji-fallback\\'>${getExerciseEmoji(exerciseName)}</span>'">`;
+                } else {
+                // Use real images from exercise DB
                 const img0 = EXERCISE_DB_BASE + imageId + '/0.jpg';
                 const img1 = EXERCISE_DB_BASE + imageId + '/1.jpg';
                 
@@ -1765,6 +1771,7 @@
                         img.src = showingFirst ? img0 : img1;
                     }
                 }, 800); // Alternate every 800ms
+                }
             } else {
                 // Fallback to emoji
                 animDiv.innerHTML = `<span class="emoji-fallback">${getExerciseEmoji(exerciseName)}</span>`;
