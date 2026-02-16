@@ -1189,6 +1189,13 @@
             }
         }
         
+        // Re-acquire wake lock when returning to tab (Safari releases it on visibility change)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && isRunning) {
+                requestWakeLock();
+            }
+        });
+        
         // Storage
         function saveData() {
             localStorage.setItem('patrickWorkouts', JSON.stringify(workouts));
