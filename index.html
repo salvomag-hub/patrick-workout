@@ -1672,78 +1672,108 @@
         // Exercise Animation Mapping with Real Images from free-exercise-db
         const EXERCISE_DB_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
         
-        // Map exercise names to database IDs
+        // Map exercise names (keyword substring) to database image IDs.
+        // IMPORTANT: matching prefers the LONGEST (most specific) keyword that
+        // matches, so 'glute bridge' wins over 'bridge', 'crunch bicicletta'
+        // wins over 'crunch', 'split squat' wins over 'squat', ecc.
+        // Esercizi senza immagine fedele nel DB (wall sit, bird dog,
+        // side-lying hip lift...) NON vengono mappati: cadono sull'emoji,
+        // meglio nessuna immagine che un'immagine sbagliata.
         const exerciseImageMap = {
-            // Squat variations
+            // Squat
             'squat': 'Bodyweight_Squat',
-            'wall sit': 'Bodyweight_Squat',
-            'jump squat': 'Bodyweight_Squat',
-            
-            // Lunges
-            'lunge': 'Bodyweight_Walking_Lunge',
+            'accosciata': 'Bodyweight_Squat',
+
+            // Split squat / affondo statico (deve vincere su 'squat')
+            'split squat': 'Bodyweight_Walking_Lunge',
+            'bulgarian': 'Bodyweight_Walking_Lunge',
+
+            // Affondi / lunges
+            'walking lunge': 'Bodyweight_Walking_Lunge',
+            'reverse lunge': 'Bodyweight_Walking_Lunge',
+            'affondi indietro': 'Bodyweight_Walking_Lunge',
             'affond': 'Bodyweight_Walking_Lunge',
-            
-            // Bridge
+            'lunge': 'Bodyweight_Walking_Lunge',
+
+            // Glute bridge / ponte (glute bridge deve vincere su bridge)
+            'glute bridge': 'Butt_Lift_Bridge',
+            'ponte glutei': 'Butt_Lift_Bridge',
+            'hip thrust': 'Barbell_Hip_Thrust',
             'bridge': 'Butt_Lift_Bridge',
             'ponte': 'Butt_Lift_Bridge',
-            'glute bridge': 'Butt_Lift_Bridge',
-            
-            // Leg Curls
-            'leg curl': 'Ball_Leg_Curl',
-            'curl': 'Ball_Leg_Curl',
-            
-            // Calf
+
+            // Calf / polpacci
+            'calf raise': 'Standing_Calf_Raises',
             'calf': 'Standing_Calf_Raises',
-            'relev': 'Standing_Calf_Raises',
             'polpacc': 'Standing_Calf_Raises',
-            
-            // Swimming (back exercise)
-            'swim': 'Superman',
-            
-            // Crunch / Abs
-            'crunch': 'Crunch_-_Hands_Overhead',
+            'relev': 'Standing_Calf_Raises',
+
+            // Leg curl (nota: 'curl' generico rimosso, era troppo ampio)
+            'leg curl': 'Ball_Leg_Curl',
+
+            // Core / addome (bicicletta/bike devono vincere su crunch)
+            'crunch bicicletta': 'Air_Bike',
+            'bicycle crunch': 'Air_Bike',
+            'air bike': 'Air_Bike',
             'bicicl': 'Air_Bike',
-            'toe tap': 'CUSTOM:assets/toe-taps.jpg',
-            
-            // Core / Abs - new additions
+            'crunch': 'Crunch_-_Hands_Overhead',
             'dead bug': 'Dead_Bug',
+            'toe tap': 'CUSTOM:assets/toe-taps.jpg',
+            'single leg deadlift': 'CUSTOM:assets/single-leg-deadlift.jpg',
             'deadlift': 'CUSTOM:assets/single-leg-deadlift.jpg',
-            'hollow': 'Flutter_Kicks',
             'hollow hold': 'Flutter_Kicks',
-            
-            // Stretching
-            'stretch': 'Cat_Stretch',
+            'hollow': 'Flutter_Kicks',
+            'flutter': 'Flutter_Kicks',
+            'swim': 'Superman',
+            'superman': 'Superman',
+
+            // Stretching (specifici prima del generico 'stretch')
+            'stretch quadricipiti': 'Quad_Stretch',
+            'quad stretch': 'Quad_Stretch',
+            'quadricip': 'Quad_Stretch',
+            'stretch femorali': 'Hamstring_Stretch',
+            'hamstring': 'Hamstring_Stretch',
+            'femoral': 'Hamstring_Stretch',
+            'stretch polpacc': 'Calf_Stretch_Hands_Against_Wall',
+            'calf stretch': 'Calf_Stretch_Hands_Against_Wall',
             'child': 'Childs_Pose',
             'butterfly': 'Butterfly',
-            'yoga': 'Cat_Stretch',
             'figure 4': 'Piriformis-SMR',
-            
-            // Default
-            'default': 'Bodyweight_Squat'
+            'piriform': 'Piriformis-SMR',
+            'cat stretch': 'Cat_Stretch',
+            'gatto': 'Cat_Stretch',
+            'yoga': 'Cat_Stretch',
+            'stretch': 'Cat_Stretch'
         };
-        
+
+        // Keyword ordinate per lunghezza decrescente: la piu' specifica vince.
+        const exerciseImageKeywords = Object.keys(exerciseImageMap)
+            .sort((a, b) => b.length - a.length);
+
         let animationInterval = null;
-        
+
         function getExerciseImageId(name) {
             const n = name.toLowerCase();
-            for (const [keyword, imageId] of Object.entries(exerciseImageMap)) {
+            for (const keyword of exerciseImageKeywords) {
                 if (n.includes(keyword)) {
-                    return imageId;
+                    return exerciseImageMap[keyword];
                 }
             }
-            return null; // No image found, will use emoji fallback
+            return null; // Nessuna immagine fedele: si usa l'emoji di fallback
         }
         
         function getExerciseEmoji(name) {
             const n = name.toLowerCase();
             if (n.includes('recupero') || n.includes('rest') || n.includes('💤')) return '😌';
             if (n.includes('stretch') || n.includes('yoga')) return '🧘';
+            if (n.includes('wall sit')) return '🪑';
             if (n.includes('squat')) return '🏋️';
             if (n.includes('lunge') || n.includes('affond')) return '🦵';
-            if (n.includes('bridge') || n.includes('ponte')) return '🌉';
+            if (n.includes('bridge') || n.includes('ponte') || n.includes('hip')) return '🌉';
+            if (n.includes('bird dog') || n.includes('dead bug') || n.includes('core')) return '🧎';
             if (n.includes('curl')) return '🦿';
-            if (n.includes('calf') || n.includes('relev')) return '🦶';
-            if (n.includes('swim')) return '🏊';
+            if (n.includes('calf') || n.includes('relev') || n.includes('polpacc')) return '🦶';
+            if (n.includes('swim') || n.includes('superman')) return '🏊';
             if (n.includes('crunch') || n.includes('bicicl')) return '💪';
             if (n.includes('round') || n.includes('🔥')) return '🔥';
             return '💪';
